@@ -5,8 +5,8 @@ Loader by [NathanSnail](https://github.com/NathanSnail/lua_mods)
 
 ---
 # Installation
-Download the release [here](https://github.com/guunno/primordialis-mod-installer/releases/tag/v1)
-or [directly from this page](https://github.com/guunno/primordialis-mod-installer/releases/download/v1/PrimordialisModInstaller.zip)
+Download the release [at the release page](https://github.com/guunno/primordialis-mod-installer/releases/tag/v1)
+or [here](https://github.com/guunno/primordialis-mod-installer/releases/download/v1/installer.zip)
 
 Extract the files to anywhere and run the installer.exe
 
