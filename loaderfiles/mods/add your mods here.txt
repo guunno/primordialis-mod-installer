@@ -1,0 +1,1 @@
+Add extracted mod folders (not .zip or any compressed media, will be ignored anyway) to this directory

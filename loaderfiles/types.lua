@@ -1,0 +1,11 @@
+---@alias arged_mod {[1]: string, [2]: table}
+---@alias mod arged_mod | string
+---@class (exact) loaded_mod
+---@field name string
+---@field callbacks mod_calllbacks
+---@field config table
+---@class (exact) mod_calllbacks
+---@field pre fun(api: mod_api, config: table)?
+---@field post fun(api: mod_api, config: table)?
+---@field api_version integer
+---@field version string?
