@@ -60,7 +60,7 @@ int main()
 {
     std::string mode;
 
-    std::cout << "Gunno's Mod Installer for Primordialis\n\n\tU = Uninstall\n\tDefault = Install\nEnter mode or leave blank for default (Install): ";
+    std::cout << "Gunno's Mod Installer for Primordialis\n\n\tU = Uninstall\n\tP = Patch Init.lua (will not modify mod config)\n\tDefault = Install\nEnter mode or leave blank for default (Install): ";
     std::getline(std::cin, mode);
 
 
@@ -138,7 +138,7 @@ int main()
         return 0;
     }
 
-    std::cout << "Writing to init.lua\n";
+    std::cout << "Patching init.lua\n";
 
     initfile.close();
 
@@ -149,8 +149,8 @@ int main()
     }
     else
     {
-        std::cout << "Mod loader content already found in init.lua, skipping preline preappend\nAre you sure you're doing this correctly?\nPress enter to continue installation (ignore if updating mods)";
-        std::getline(std::cin, mode);
+        std::cout << "Mod loader content already found in init.lua, skipping preline append\nYou should only see this message if you're updating mods\nPress enter to confirm installation (ignore if updating mods)";
+        std::cin.get();
     }
     
     pos = initcontent.find(postline);
@@ -160,8 +160,8 @@ int main()
     }
     else
     {
-        std::cout << "Mod loader content already found in init.lua, skipping postline append\nAre you sure you're doing this correctly?\nPress enter to confirm installation (ignore if updating mods)";
-        std::getline(std::cin, mode);
+        std::cout << "Mod loader content already found in init.lua, skipping postline append\nYou should only see this message if you're updating mods\nPress enter to confirm installation (ignore if updating mods)";
+        std::cin.get();
     }
 
     newinitfile << initcontent;
@@ -170,8 +170,13 @@ int main()
     std::filesystem::remove((gamepath + "\\init.lua").c_str());
     std::filesystem::rename((gamepath + "\\init.temp").c_str(), (gamepath + "\\init.lua").c_str());
 
-    copynormal(gamepath);
-    genModList(gamepath);
+    std::cout << "Completed Init patch\n";
+
+    if (mode != "P" && mode != "p")
+    {
+        copynormal(gamepath);
+        genModList(gamepath);
+    }
 
     std::cout << "Done!\n";
     std::system("pause");
