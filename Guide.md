@@ -1,6 +1,6 @@
 # How to use the installer
 
-Download [here](https://github.com/guunno/primordialis-mod-installer/releases/download/v2/installer.zip), from the discord, or from the [release page](https://github.com/guunno/primordialis-mod-installer/releases/tag/v2)
+Download [here](https://github.com/guunno/primordialis-mod-installer/releases/download/v3/installer.zip), from the discord, or from the [release page](https://github.com/guunno/primordialis-mod-installer/releases)
 
 # Downloading the installer
 Once you have the installer.zip downloaded, extract its contents to a folder (or just your downloads directory)
