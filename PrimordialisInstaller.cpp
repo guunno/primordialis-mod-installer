@@ -1,18 +1,20 @@
-#include <filesystem>
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <filesystem>
+
+namespace fs = std::filesystem;
 
 void copynormal(std::string gamepath)
 {
     gamepath += "\\lua_mods";
-    std::filesystem::create_directory(gamepath);
-    for (const auto& entry : std::filesystem::directory_iterator("loaderfiles"))
+    fs::create_directory(gamepath);
+    for (const auto& entry : fs::directory_iterator("loaderfiles"))
     {
-        if (std::filesystem::is_regular_file(entry.path()))
+        if (fs::is_regular_file(entry.path()))
         {
             std::cout << "Found loader file: " << entry.path().filename() << "\n";
-            std::filesystem::copy_file(entry.path(), gamepath / entry.path().filename(), std::filesystem::copy_options::overwrite_existing);
+            fs::copy_file(entry.path(), gamepath / entry.path().filename(), fs::copy_options::overwrite_existing);
         }
     }
 }
@@ -21,8 +23,8 @@ void genModList(std::string gamepath)
 {
     std::string modlist = "---@type mod[]\n-- Example settings: {\"modname\", {configA = 16, configB = 0.5}}\n-- Read each mods readme file for more information\nLUA_MODLOADER_MOD_LIST = {\n";
 
-    std::filesystem::create_directory(gamepath + "\\lua_mods\\mods");
-    if (std::filesystem::is_empty("loaderfiles/mods"))
+    fs::create_directory(gamepath + "\\lua_mods\\mods");
+    if (fs::is_empty("loaderfiles/mods"))
     {
         std::cout << "Found no mods\n";
         return;
@@ -38,12 +40,12 @@ void genModList(std::string gamepath)
 
     uint32_t filecount = 0;
 
-    for (const auto& entry : std::filesystem::directory_iterator("loaderfiles/mods"))
+    for (const auto& entry : fs::directory_iterator("loaderfiles/mods"))
     {
-        if (std::filesystem::is_directory(entry.path()))
+        if (fs::is_directory(entry.path()))
         {
             std::cout << "Found mod: " << entry.path().filename() << "\n";
-            std::filesystem::copy(entry.path(), (gamepath + "\\lua_mods\\mods") / entry.path().filename(), std::filesystem::copy_options::overwrite_existing | std::filesystem::copy_options::recursive);
+            fs::copy(entry.path(), (gamepath + "\\lua_mods\\mods") / entry.path().filename(), fs::copy_options::overwrite_existing | fs::copy_options::recursive);
             std::cout << "Installed\nAppending config\n";
             modlist += "\t{ \"" + entry.path().filename().string() + "\", {} },\n";
             filecount++;
@@ -68,12 +70,13 @@ int main()
     std::string preline = "dofile(\"data/scripts/lua_mods/pre.lua\")\n";
     std::string postline = "dofile(\"data/scripts/lua_mods/post.lua\")";
     
-    while (!std::filesystem::exists(gamepath))
+    while (!fs::exists(gamepath))
     {
         std::cout << "Failed to find folder at location\n";
         std::cout << "Expected at: " << gamepath;
-        std::cout << "Enter game data\\scripts folder path: ";
-        std::cin >> gamepath;
+        std::cout << "\nEnter game data\\scripts folder path: ";
+        gamepath = "";
+        std::getline(std::cin, gamepath);
     }
     std::cout << "Found valid directory\n";
 
@@ -99,12 +102,12 @@ int main()
     {
         std::cout << "Uninstalling\n";
 
-        if (std::filesystem::exists(gamepath + "\\lua_mods"))
+        if (fs::exists(gamepath + "\\lua_mods"))
         {
             std::cout << "Deleting lua_mods\n";
             try
             {
-                std::filesystem::remove_all(gamepath + "\\lua_mods");
+                fs::remove_all(gamepath + "\\lua_mods");
             }
             catch (...)
             {
@@ -130,8 +133,8 @@ int main()
         initfile.close();
         newinitfile.close();
 
-        std::filesystem::remove((gamepath + "\\init.lua").c_str());
-        std::filesystem::rename((gamepath + "\\init.temp").c_str(), (gamepath + "\\init.lua").c_str());
+        fs::remove((gamepath + "\\init.lua").c_str());
+        fs::rename((gamepath + "\\init.temp").c_str(), (gamepath + "\\init.lua").c_str());
 
         std::cout << "Done!\n";
         std::system("pause");
@@ -167,8 +170,8 @@ int main()
     newinitfile << initcontent;
     newinitfile.close();
 
-    std::filesystem::remove((gamepath + "\\init.lua").c_str());
-    std::filesystem::rename((gamepath + "\\init.temp").c_str(), (gamepath + "\\init.lua").c_str());
+    fs::remove((gamepath + "\\init.lua").c_str());
+    fs::rename((gamepath + "\\init.temp").c_str(), (gamepath + "\\init.lua").c_str());
 
     std::cout << "Completed Init patch\n";
 
